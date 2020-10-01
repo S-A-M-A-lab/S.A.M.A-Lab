@@ -5,6 +5,7 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      allUsers: [],
       username: null,
       password: null,
       nextpath: "/home",
@@ -20,8 +21,24 @@ class Login extends React.Component {
     });
   }
 
+  componentDidMount() {
+    axios
+      .get("/name")
+      .then((res) => {
+        this.setState({
+          allUsers: res.data.map((element) => Object.values(element)).flat(),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   handleSubmit(e) {
     e.preventDefault();
+    if (this.state.allUsers.indexOf(this.state.username) === -1) {
+      alert("name or password are wrong");
+      return false;
+    }
     axios
       .post("/login", this.state)
       .then((res) => {
