@@ -1,30 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 var SideBar = () => (
   <ul
     className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
     id="accordionSidebar"
   >
     {/* Sidebar - Brand */}
-    <a
+    <Link
       className="sidebar-brand d-flex align-items-center justify-content-center"
-      href="index.html"
+      to="/"
     >
       <div className="sidebar-brand-icon rotate-n-15">
         <i className="fas fa-laugh-wink"></i>
       </div>
       <div className="sidebar-brand-text mx-3">SAMA-LAB</div>
-    </a>
+    </Link>
 
     {/* Divider */}
     <hr className="sidebar-divider my-0" />
 
     {/* Nav Item - Dashboard */}
     <li className="nav-item">
-      <Link to="/" className="nav-link" >
-      <i className="fas fa-fw fa-home"></i>
+      <Link to="/" className="nav-link">
+        <i className="fas fa-fw fa-home"></i>
         <span>Home</span>
       </Link>
     </li>
@@ -35,7 +34,36 @@ var SideBar = () => (
     {/* Heading */}
     <div className="sidebar-heading">Interface</div>
 
-    {/* Nav Item - Pages Collapse Menu */}
+    {/* Nav Item - Messages */}
+    <li className="nav-item">
+      <a
+        className="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseOne"
+        aria-expanded="true"
+        aria-controls="collapseOne"
+      >
+        <i className="fas fa-fw fa-envelope"></i>
+        <span>Messages</span>
+      </a>
+
+      <div
+        id="collapseOne"
+        className="collapse"
+        aria-labelledby="headingOne"
+        data-parent="#accordionSidebar"
+      >
+        <div className="bg-white py-2 collapse-inner rounded">
+          <Link to="/messages/inbox" className="collapse-item">
+            Inbox
+          </Link>
+          
+        </div>
+      </div>
+    </li>
+    
+    {/* Nav Item - Organizations */}
     <li className="nav-item">
       <a
         className="nav-link collapsed"
@@ -67,7 +95,7 @@ var SideBar = () => (
       </div>
     </li>
 
-    {/* Nav Item - Utilities Collapse Menu */}
+    {/* Nav Item - Projects */}
     <li className="nav-item">
       <a
         className="nav-link collapsed"
