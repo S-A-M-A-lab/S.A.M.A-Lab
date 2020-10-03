@@ -69,7 +69,11 @@ class Login extends React.Component {
           </div>
         </form>
         <p className="text-center">
-          <a href="/users" onClick={() => {}}>
+          <a
+            onClick={() => {
+              this.props.func("", null);
+            }}
+          >
             Create an Account
           </a>
         </p>

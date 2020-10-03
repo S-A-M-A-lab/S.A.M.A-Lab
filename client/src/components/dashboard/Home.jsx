@@ -1,8 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import $ from "jquery";
+import OrganizationDetail from '../organizations/OrganizationDetail.jsx';
 class Home extends React.Component {
   constructor() {
     super();
+    this.state={
+      data : [],
+      userID : 1
+    }
+    
+  };
+
+  getorganization(){
+    $.get(`organization/${this.state.userID}`,(data)=>{
+      }).done((data=>{this.setState({data})}))
+  }
+  componentDidMount(){
+    this.getorganization();
   }
 
   render() {
@@ -20,7 +35,7 @@ class Home extends React.Component {
               <div className="card-body">
 
                 <ul className="list-group">
-                  <li className="list-group-item">
+                  {/* <li className="list-group-item">
                     <Link to="/organizations/1">Organization 1</Link>
                   </li>
                   <li className="list-group-item">
@@ -34,8 +49,16 @@ class Home extends React.Component {
                   </li>
                   <li className="list-group-item">
                     <Link to="/organizations/5">Organization 5</Link>
-                  </li>
-
+                  </li> */}
+                  {this.state.data.map((ele, i) => {
+                return (
+                  <OrganizationDetail
+                    key={i}
+                    org={ele}
+                    f={() => this.getorganization.bind(this)()}
+                  />
+                );
+              })}
                 </ul>
               </div>
             </div>

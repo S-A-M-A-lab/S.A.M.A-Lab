@@ -80,10 +80,25 @@ const addProject = function (name, description, organizationID) {
   });
 };
 
-const getproject = function (organizationID) {
+const getOrgproject = function (organizationID) {
   return new Promise((resolve, reject) => {
     connection.query(
       `select * from organizations where organizationID=${organizationID}`,
+      (e, result) => {
+        if (e) {
+          console.log(e);
+          return reject();
+        }
+        resolve(result);
+      }
+    );
+  });
+};
+
+const getUserproject = function (userID) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `select * from organizations where user_id=${userID}`,
       (e, result) => {
         if (e) {
           console.log(e);
@@ -124,6 +139,21 @@ const updateProject = function (id, name, description, organizationID) {
     );
   });
 };
+/***** getting a user messages *****/
+const getMessages = function (userID) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `select * from messages where recieverID=${userID}`,
+      (e, result) => {
+        if (e) {
+          console.log(e);
+          return reject();
+        }
+        resolve(result);
+      }
+    );
+  });
+};
 
 /***** displaying the connection to the database *****/
 connection.connect((err) => {
@@ -143,7 +173,10 @@ module.exports = {
   updateOrgenazation,
   /* just to clarify */
   addProject,
-  getproject,
+  getUserproject,
+  getOrgproject,
   deleteProject,
   updateProject,
+  /* just to clarify */
+  getMessages
 };

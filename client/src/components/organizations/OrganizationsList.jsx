@@ -1,25 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
-import OrganizationDetail from './OrganizationDetail.jsx'
+import OrganizationDetail from "./OrganizationDetail.jsx";
 
 class OrganizationsList extends React.Component {
   constructor() {
     super();
-    this.state={
-      data : [],
-      userID :1
-    }
+    this.state = {
+      data: [],
+      userID : 1
+    };
   }
 
-  getorganization(){
-    $.get(`organization/${this.state.userID}`,(data)=>{
-      }).done((data=>{this.setState({data})}))
+  getorganization() {
+    $.get(`organization/${this.state.userID}`, (data) => {}).done((data) => {
+      this.setState({ data });
+    });
   }
-  componentDidMount(){
+  componentDidMount() {
     this.getorganization();
   }
-  
+
   render() {
     return (
       <div>
@@ -32,13 +33,18 @@ class OrganizationsList extends React.Component {
           </div>
           <div className="card-body">
             <ul className="list-group">
-
               <li className="list-group-item">
-                <Link to="/organizations/1" >Organization 1</Link>
+                <Link to="/organizations/1">Organization 1</Link>
               </li>
-          
-              {this.state.data.map((ele,i)=>{
-                return <OrganizationDetail key={i} org={ele} f={()=>this.getorganization.bind(this)()} />
+
+              {this.state.data.map((ele, i) => {
+                return (
+                  <OrganizationDetail
+                    key={i}
+                    org={ele}
+                    f={() => this.getorganization.bind(this)()}
+                  />
+                );
               })}
             </ul>
           </div>
