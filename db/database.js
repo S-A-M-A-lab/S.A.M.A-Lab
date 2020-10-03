@@ -3,6 +3,18 @@ const mysqlConfig = require("./config.js");
 
 const connection = mysql.createConnection(mysqlConfig);
 
+const getUserId = function(username){
+  return new Promise((resolve,reject)=>{
+    connection.query(`select id from users where username='${username}'`,(e,result)=>{
+      if(e){
+        console.log(e)
+        reject(e);
+      }
+      resolve(result);
+    })
+  })
+}
+
 /***** crud operations for organisations table *****/
 const createOrganization = function (userID, name, description) {
   return new Promise((resolve, reject) => {
@@ -65,22 +77,8 @@ const updateOrgenazation = function (id, name, description, userID) {
   });
 };
 
-/***** crud operations for projects table *****/
-const addProject = function (name, description, organizationID) {
-  return new Promise((resolve, reject) => {
-    connection.query(`insert into projects set ?`),
-      { name, description, organizationID },
-      (e, result) => {
-        if (e) {
-          console.log(e);
-          return reject();
-        }
-        resolve(result);
-      };
-  });
-};
 
-const getproject = function (organizationID) {
+const getOrgproject = function (organizationID) {
   return new Promise((resolve, reject) => {
     connection.query(
       `select * from organizations where organizationID=${organizationID}`,
@@ -95,10 +93,30 @@ const getproject = function (organizationID) {
   });
 };
 
-const deleteProject = function (organizationID, id) {
+const getUserproject = function (userID) {
   return new Promise((resolve, reject) => {
     connection.query(
-      `delete from projects where organizationID=${organizationID} and id=${id}`,
+      `select * from organizations where user_id=${userID}`,
+      (e, result) => {
+        if (e) {
+          console.log(e);
+          return reject();
+        }
+        resolve(result);
+      }
+    );
+  });
+};
+
+const deleteProject = function (organizationID, id) {
+
+/**
+ * get all projects by org id by user id
+ */
+const getOrgProjects = function (orgId, userId) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `select * from projects where organizationID=${orgId} and userID = ${userId}`,
       (e, result) => {
         if (e) {
           console.log(e);
@@ -124,6 +142,21 @@ const updateProject = function (id, name, description, organizationID) {
     );
   });
 };
+/***** getting a user messages *****/
+const getMessages = function (userID) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `select * from messages where recieverID=${userID}`,
+      (e, result) => {
+        if (e) {
+          console.log(e);
+          return reject();
+        }
+        resolve(result);
+      }
+    );
+  });
+};
 
 /***** displaying the connection to the database *****/
 connection.connect((err) => {
@@ -134,15 +167,17 @@ connection.connect((err) => {
 
   console.log("connected as id " + connection.threadId);
 });
-
+}
 module.exports = {
+  connection,
   createOrganization,
   getOrganization,
   deleteOrganisation,
   updateOrgenazation,
   /* just to clarify */
-  addProject,
-  getproject,
+  getUserproject,
+  getOrgproject,
   deleteProject,
-  updateProject,
+  /* just to clarify */
+  getUserId
 };

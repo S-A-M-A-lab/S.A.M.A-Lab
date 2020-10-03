@@ -1,19 +1,37 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Navbar from "./Navbar.jsx";
-import SideBar from "./SideBar.jsx";
-import Logout from "./Logout.jsx";
-import Footer from "./Footer.jsx";
-import Content from "./Content.jsx";
+import Navbar from "./dashboard/Navbar.jsx";
+import SideBar from "./dashboard/SideBar.jsx";
+import Logout from "./authentication/Logout.jsx";
+import Footer from "./dashboard/Footer.jsx";
+import Content from "./dashboard/Content.jsx";
+import axios from "axios";
 class DashBoard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      username: "",
+      id: "",
+    };
   }
-
-  render() {
+  componentDidMount() {
+    axios
+      .post("/user/id", {
+        userID: this.props.username,
+      })
+      .then((result) => {
+        const user = result.data[0].id;
+        window.userID = user ;
+        this.setState({ id: user, username: this.props.username });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    render() {
+      console.log("DashBoard -> componentDidMount ->  window.userID",  window.userID)
+    console.log(this.state);
     return (
       <Router>
         <div>
@@ -30,14 +48,14 @@ class DashBoard extends React.Component {
               {/* Main Content */}
               <div id="content">
                 {/* Topbar */}
-                <Navbar />
+                <Navbar userID={this.state.id} />
                 {/* End of Topbar */}
 
                 {/* Begin Page Content */}
                 <div className="container-fluid">
                   {/* Page Heading */}
-                  
-                  <Content />
+
+                  <Content userID={this.state.id} />
                 </div>
                 {/* /.container-fluid */}
               </div>
@@ -57,7 +75,7 @@ class DashBoard extends React.Component {
           </a>
 
           {/* Logout Modal */}
-          <Logout />
+          <Logout userID={this.state.id} />
         </div>
       </Router>
     );
