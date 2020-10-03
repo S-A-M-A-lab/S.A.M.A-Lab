@@ -9,7 +9,6 @@ login.post("/login", (req, res) => {
     "SELECT password FROM users WHERE username = " + '"' + user.username + '"';
   db.connection.query(sql, (err, data) => {
     if (err) console.error(err);
-    console.log(data[0].password);
     res.send(bcrypt.compareSync(user.password, data[0].password));
   });
 });

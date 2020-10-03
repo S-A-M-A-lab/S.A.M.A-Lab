@@ -1,20 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
-import OrganizationDetail from "./OrganizationDetail.jsx";
 
 class OrganizationsList extends React.Component {
   constructor() {
     super();
     this.state = {
-      data: [],
-      userID : 1
+      organizations: [],
+      userID: 1,
     };
   }
 
   getorganization() {
     $.get(`organization/${this.state.userID}`, (data) => {}).done((data) => {
-      this.setState({ data });
+      console.log(data)
+      this.setState({ organizations: data });
     });
   }
   componentDidMount() {
@@ -28,24 +28,23 @@ class OrganizationsList extends React.Component {
         <div className="card shadow mb-4">
           <div className="card-header py-3">
             <h6 className="m-0 font-weight-bold text-primary">
-              Basic Card Example
+              My organizations/Teams
             </h6>
           </div>
           <div className="card-body">
             <ul className="list-group">
-              <li className="list-group-item">
-                <Link to="/organizations/1">Organization 1</Link>
-              </li>
-
-              {this.state.data.map((ele, i) => {
+              {this.state.organizations.map((org) => {
                 return (
-                  <OrganizationDetail
-                    key={i}
-                    org={ele}
-                    f={() => this.getorganization.bind(this)()}
-                  />
+                  <li key={org.id} className="list-group-item">
+                    <Link to={`/organizations/${org.id}/user/${this.state.userID}/projects/all`}>{org.name}</Link>
+                  </li>
                 );
-              })}
+              }) || (
+                <div>
+                  <p>"You don't have any org/team yet"</p>
+                  <button type="submit" className="btn btn-primary">Create new Organization/Team</button>
+                </div>
+              )}
             </ul>
           </div>
         </div>
